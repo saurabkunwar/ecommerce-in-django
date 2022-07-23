@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %} Search {% endblock %}
+{% block header %} Search Product {% endblock %}
+{% block content %}
+
+<div class="cotainer">
+    <div class="row" id="ads">
+    {% for product in products %}
+    {% if product.is_active %}
+    <div class="col-md-4">
+        <div class="card rounded">
+            <div class="card-image">
+                <span class="card-notify-badge">{{product.category.name}}</span>
+                <span class="card-notify-year">{{product.brand.name}}</span>
+                <img class="img-fluid" src="{{ product.image_url }}" style="height:200px; width:auto;" alt="Alternate Text" />
+            </div>
+            <div class="card-image-overlay m-auto">
+                <span class="card-detail-badge">{{ product.registered_on }}</span>
+                <span class="card-detail-badge">NRs. {{ product.price }}</span>
+                <span class="card-detail-badge">Remaining {{ product.quantity }}</span>
+            </div>
+            <div class="card-body text-center">
+                <div class="ad-title m-auto">
+                    <h5>{{product.name}}</h5>
+                </div>
+                <form class="d-flex" action="/cart" method="GET">
+                    <!-- Default input -->
+                    <input type="hidden" name="id" value="{{product.id}}" />
+
+                    <input type="number" name="qty" value="1" aria- label="Search" class="form-control" style="width: 100px">
+
+                    <button id="btn-add-to-cart" class="ad-btn" type="submit" data-toggle="modal"
+                        data-target="#cart-model"> Add to cart</button>
+
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+    </div>
+</div>
+{% endblock %}

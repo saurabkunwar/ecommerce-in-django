@@ -1,0 +1,115 @@
+{% extends "base.html" %} 
+{% block title %} Cart {% endblock %} 
+{% block header%} Your Cart {% endblock %} 
+{% block content %} 
+{% if cart_items %}
+
+<div class="cart-wrap">
+  <div class="container">
+        <div class="row">
+        <div class="col-lg-8">
+            <div class="main-heading">Shopping Cart</div>
+            <div class="table-cart">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Quantity</th>
+                                <th>Remove</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                          {% for item in cart_items %}
+                            <tr>
+                                <td>
+                                  <div class="display-flex align-center">
+                                      <div class="img-product">
+                                          <img src="{{item.product.image_url }}" height="50" width="50" alt="" class="mCS_img_loaded">
+                                      </div>
+                                      <div class="name-product">
+                                        {{ item.product.name }}
+                                      </div>
+                                      <div class="price">
+                                        Nrs.{{ item.product.price }}
+                                      </div>
+                                    </div>
+                                </td>
+                                <td><h5 class="text-center">{{ item.quantity }}</h5></td>
+                                <td>
+                                  <form method="post" action="/cart/remove/{{item.product.id}}">
+                                    {% csrf_token %}
+                          
+                                    <button type="submit" class="btn btn-danger" type="submit">
+                                      <i class="fa fa-times" aria-hidden="true"></i>
+                                    </button>
+                                  </form>
+                                </td>
+                                <td>
+                                    <a href="#" title="">
+                                        <img src="images/icons/delete.png" alt="" class="mCS_img_loaded">
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    
+            </div>
+            <!-- /.table-cart -->
+        </div>
+        <!-- /.col-lg-8 -->
+        <div class="col-lg-4">
+            <div class="cart-totals">
+                <h3>Cart Totals</h3>
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td>Subtotal</td>
+                                <td class="subtotal">NRs. {{ total }}</td>
+                            </tr>
+                            <tr>
+                                <td>Shipping</td>
+                                <td class="free-shipping">Free Shipping</td>
+                            </tr>
+                            <tr class="total-row">
+                                <td>Total</td>
+                                <td class="price-total">{{ total }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <form method="post" action="/payment/checkout/">
+                      {% csrf_token %}
+                      <br>
+                        <input 
+                         type="text"
+                          class="form-control"
+                          name="token"
+                          style="border-radius:10px; margin-bottom:10px;"
+                          placeholder="Token"/>
+                        <input
+                          type="hidden"
+                          name="amount"
+                          value="{{ total}}"
+                        />
+                        <button type="submit" class="checkout round-black-btn" type="submit">
+                          Checkout Payment
+                        </button>
+                    </form>
+                    <!-- /.btn-cart-totals -->
+                <!-- /form -->
+            </div>
+            <!-- /.cart-totals -->
+        </div>
+        <!-- /.col-lg-4 -->
+    </div>
+  </div>
+</div>
+
+{% else %}
+<h2>No product added to cart.</h2>
+<button onclick="location.href='/';" class="btn btn-info">
+  <i class="fa fa-search" aria-hidden="true"></i> Back to shop!
+</button>
+{% endif %} 
+{% endblock %}
